@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 //conexão bd
 const urlMongo = 'mongodb+srv://user_admin:20202020@cluster0.hw2cr.mongodb.net/Cluster0?retryWrites=true&w=majority';
-const options = {  poolSize: 5, useNewUrlParser: true, useUnifiedTopology: true}
+ const options = {  poolSize: 5, useNewUrlParser: true, useUnifiedTopology: true}
 mongoose.set('useCreateIndex', true);
 mongoose.connection.on('error', (error) => {
 	console.log(error);
@@ -17,23 +17,17 @@ mongoose.connection.on('disconnected', (error) => {
 mongoose.connection.on('connected', (error) => {
 	console.log("Conectado");
 });
-
-
 mongoose.connect(urlMongo,options);
-const Product = require('./models/productsModel');
+
+//config body-parser
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 //carregamento de rotas
 const index = require('./routes/index');
 const productRouter = require('./routes/products/productRouter');
 app.use('/home', index);
 app.use('/produtos', productRouter);
-
-//config body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
-
-
 
 
 
