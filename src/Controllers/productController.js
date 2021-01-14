@@ -72,15 +72,27 @@ exports.post = (req,res,next) => {
 	.catch(e => res.status(400).send({message: 'Não criado', data: e}));	
 	
 }
-exports.put = (req,res,next) => {	
-	const id = req.params.id;
-	res.status(200).send({id});
+
+
+exports.put = async (req,res,next) => {	
+	try {	
+
+	//new true para devolver o valor atualizado
+	const result = await Product.findByIdAndUpdate(req.params.id,req.body, {new: true});
+	console.log(result);
+	return res.status(200).send({message: 'não encontrou',result});
+
+	} catch (e) {
+		console.log(e)
+		return res.staus(400).send({message: 'Não foi possível atualizar'});
+	}
+
 }
 exports.delete = async (req,res,next) => {	 
 	// const _id = req.params._id;
 	try {
 
-	const result = await Product.deleteOne(req.params._id);
+	const result = await Product.findOneAndRemove(req.body.id);
 	res.status(200).send(result);
 
 } catch (e) {
