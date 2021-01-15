@@ -1,6 +1,7 @@
 'use strict'
 const mongoose = require('mongoose');
 const Product = require('./../models/productsModel');
+const Validator = require('./../validators/fluent-validator');
 //const Product = mongoose.model('Product');
 
 
@@ -64,6 +65,13 @@ exports.getByTag = async (req,res,next) => {
 	
 }
 exports.post = (req,res,next) => {	
+
+	let contract = new Validator();
+	contract.isRequired(req.body.title, "O titulo é requerido");
+
+	if(!contract.isValid()) return res.status(400).send(contract.errors()).end();
+	//return;
+
 	var product = new Product(req.body);		
 	//devolve uma promisse save()
 	product
@@ -84,7 +92,7 @@ exports.put = async (req,res,next) => {
 
 	} catch (e) {
 		console.log(e)
-		return res.staus(400).send({message: 'Não foi possível atualizar'});
+		return res.status(400).send({message: 'Não foi possível atualizar'});
 	}
 
 }
