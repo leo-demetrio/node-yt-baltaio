@@ -1,15 +1,17 @@
 'use strict'
 const mongoose = require('mongoose');
-const Product = require('./../models/productsModel');
+//const Product = require('./../models/productsModel');
 const Validator = require('./../validators/fluent-validator');
-//const Product = mongoose.model('Product');
+const productRepository = require('./../repositories/productsrepository');
+const Product = mongoose.model('Product');
 
 
 exports.get = async (req,res,next) => {
 
 	try {
 
-	const productAll = await Product.find({}, 'title price slug');
+	const productAll = await productRepository.get();
+	//console.log(productAll);
 	if(productAll.length === 0) return res.status(200).send({message: "Nenhum produto encontrado"});
 	return	res.status(200).send(productAll);
 
@@ -23,13 +25,13 @@ exports.getBySlug = async (req,res,next) => {
 
 	try {
 			
-		const slug = await Product.findOne({slug: req.params.slug}, 'title price slug');
+		const slug = await productRepository.getBySlug(req.params.slug);
 		if(slug.length === 0) return res.status(200).send({message: "Nenhum produto encontrado"});
 		return	res.status(200).send(slug);
 
 	} catch (e) {
 		console.log(e);
-		return res.status(400).send({message: 'Nada achado byslug'});
+		return res.status(500).send({message: 'Nada achado byslug'});
 		
 	}
 	
@@ -37,14 +39,14 @@ exports.getBySlug = async (req,res,next) => {
 exports.getById = async (req,res,next) => {
 
 	try {
-			
-		const slug = await Product.findById(req.params.id);
-		if(slug.length === 0) return res.status(200).send({message: "Nenhum produto encontrado"});
-		return	res.status(200).send(slug);
+		
+		const id = await productRepository.getById(req.params.id);
+		if(id.length === 0) return res.status(200).send({message: "Nenhum produto encontrado"});
+		return	res.status(200).send(id);
 
 	} catch (e) {
 		console.log(e);
-		return res.status(400).send({message: 'Nada achado byslug'});
+		return res.status(400).send({message: 'Nada achado byid'});
 		
 	}
 	
@@ -53,7 +55,7 @@ exports.getByTag = async (req,res,next) => {
 
 	try {
 			
-		const tag = await Product.find({tags: req.params.tag});
+		const tag = await productRepository.getByTag(req.params.tag);
 		if(tag.length === 0) return res.status(200).send({message: "Nenhum produto encontrado"});
 		return	res.status(200).send(tag);
 
@@ -64,21 +66,27 @@ exports.getByTag = async (req,res,next) => {
 	}
 	
 }
-exports.post = (req,res,next) => {	
+exports.post = async (req,res,next) => {	
 
-	let contract = new Validator();
-	contract.isRequired(req.body.title, "O titulo é requerido");
+	try {
 
-	if(!contract.isValid()) return res.status(400).send(contract.errors()).end();
-	//return;
+		let contract = new Validator();
+		contract.isRequired(req.body.title, "O titulo é requerido");
 
-	var product = new Product(req.body);		
-	//devolve uma promisse save()
-	product
-	.save()
-	.then((valor) => res.status(201).send({message: 'Criado'}))
-	.catch(e => res.status(400).send({message: 'Não criado', data: e}));	
+		if(!contract.isValid()) return res.status(400).send(contract.errors()).end();
 	
+
+		var product = await productRepository.create(req.body);	
+		if(product.length === 0) res.status(400).send({message: 'Não criado', data: e});
+
+		return res.status(201).send({message: 'Criado',product});
+
+
+		} catch (e) {
+			console.log(e);
+			return res.status(400).send({message: 'Não criado'});
+			
+		}
 }
 
 
@@ -86,9 +94,10 @@ exports.put = async (req,res,next) => {
 	try {	
 
 	//new true para devolver o valor atualizado
-	const result = await Product.findByIdAndUpdate(req.params.id,req.body, {new: true});
-	console.log(result);
-	return res.status(200).send({message: 'não encontrou',result});
+	const result = await productRepository.update(req.params.id,req.body);
+	//console.log(result);
+	if(result.length === 0) res.status(400).send({message: 'não encontrou',result});
+	return res.status(200).send({message: 'Atualizado',result});
 
 	} catch (e) {
 		console.log(e)
@@ -97,14 +106,25 @@ exports.put = async (req,res,next) => {
 
 }
 exports.delete = async (req,res,next) => {	 
-	// const _id = req.params._id;
+
 	try {
 
-	const result = await Product.findOneAndRemove(req.body.id);
-	res.status(200).send(result);
+		if(req.body.id === undefined) res.status(400).send({message: "Não foi possível excluir"});
 
-} catch (e) {
-	return res.status(400).send({message: 'Nada excluído'});
-	console.log(e);
+		const result = await productRepository.delete(req.body.id);
+
+		res.status(200).send(result);
+
+	} catch (e) { functionCatch(e,400,"Nada excluído"); }
+	//  catch (e) {
+	// 	return res.status(400).send({message: 'Nada excluído'});
+	// 	console.log(e);
+	// }
 }
+
+function functionCatch(err,codigo,message) {
+	 
+		return res.status(codigo).send({message});
+		console.log(err);
+	
 }

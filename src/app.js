@@ -1,8 +1,9 @@
+const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
 const router = express.Router();
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+
 
 //conexão bd
 const urlMongo = 'mongodb+srv://user_admin:20202020@cluster0.hw2cr.mongodb.net/Cluster0?retryWrites=true&w=majority';
@@ -26,10 +27,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 //carregamento de rotas
+require('./models/productsModel');
+require('./models/customersModel');
+
 const index = require('./routes/index');
 const productRouter = require('./routes/products/productRouter');
+
 app.use('/home', index);
 app.use('/produtos', productRouter);
+
 
 
 
