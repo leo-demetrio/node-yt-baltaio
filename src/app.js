@@ -3,11 +3,12 @@ const express = require('express');
 const app = express();
 const router = express.Router();
 const bodyParser = require('body-parser');
+const config = require('./config');
 
 
 //conexão bd
-const urlMongo = 'mongodb+srv://user_admin:20202020@cluster0.hw2cr.mongodb.net/Cluster0?retryWrites=true&w=majority';
- const options = {  poolSize: 5, useNewUrlParser: true, useUnifiedTopology: true}
+const urlMongo = config.connectionString;
+const options = {  poolSize: 5, useNewUrlParser: true, useUnifiedTopology: true}
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 
