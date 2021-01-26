@@ -26,15 +26,20 @@ mongoose.connect(urlMongo,options);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-//carregamento de rotas
+//carregamento de Models
 require('./models/productsModel');
 require('./models/customersModel');
+require('./models/orderModel');
 
-const index = require('./routes/index');
-const productRouter = require('./routes/products/productRouter');
 
-app.use('/home', index);
-app.use('/produtos', productRouter);
+//carregamento de Rotas
+//const index = require('./routes/index');
+//const productRouter = require('./routes/products/productRouter');
+//app.use('/home', index);
+app.use('/home', require('./routes/index'));
+app.use('/produtos', require('./routes/products/productRouter'));
+app.use('/clientes', require('./routes/customer/customerRouter'));
+app.use('/pedidos', require('./routes/order/orderRouter'));
 
 
 

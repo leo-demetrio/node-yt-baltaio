@@ -11,27 +11,35 @@ const OrderSchema = new Schema({
 			number: {
 			 type: String,
 			 required: true, 
-			 trim:true 
 			},
 			createDate: {
 			 type: Date,
 			 required: true, 
 			 default: Date.now
 			},
-			number: {
+			status: {
 			 type: String,
-			 enum: ['created','dome'], 
-			 default:true 
+			 required: true,
+			 enum: ['created','done'], 
+			 default: 'created'
 			},			
-			password: {
-			 type: String,
-			  required: true,
-			   trim:true
-			  },
-			  items: [{
-			  	type: mongoose.Schema.Types.ObjectId,
-			  	ref: 'Customer'
-			  }]
+			 items: [{
+
+			  	quantity: {
+				 type: Number,
+				 required: true, 
+				 default: 1 
+				},
+				price: {
+				 type: Number,
+				 required: true, 
+				},
+				product: {
+				 type: mongoose.Schema.Types.Object,
+				  ref: 'Product',
+				 }
+
+			 	}]
 		}
 	
 );

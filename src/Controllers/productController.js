@@ -1,9 +1,9 @@
 'use strict'
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 //const Product = require('./../models/productsModel');
+//const Product = mongoose.model('Product');
 const Validator = require('./../validators/fluent-validator');
 const productRepository = require('./../repositories/productsrepository');
-const Product = mongoose.model('Product');
 
 
 exports.get = async (req,res,next) => {
@@ -115,16 +115,22 @@ exports.delete = async (req,res,next) => {
 
 		res.status(200).send(result);
 
-	} catch (e) { functionCatch(e,400,"Nada excluído"); }
-	//  catch (e) {
-	// 	return res.status(400).send({message: 'Nada excluído'});
-	// 	console.log(e);
-	// }
+	} catch (e) { fcatch(e,400,"Nada excluído",res); }
+	
 }
 
-function functionCatch(err,codigo,message) {
+//functions aux
+function fcatch(err,codigo,message) {
 	 
 		return res.status(codigo).send({message});
 		console.log(err);
 	
 }
+
+
+
+
+//  catch (e) {
+	// 	return res.status(400).send({message: 'Nada excluído'});
+	// 	console.log(e);
+	// }
