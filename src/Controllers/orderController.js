@@ -12,11 +12,10 @@ exports.get = async (req,res, next) => {
 
 	if(order.length === 0) res.status(400).send({message: 'Nenhum pedido cadastrado'});
 
-	return res.status(201).send({message: 'Criado',order});
+	return res.status(201).send({message: 'Todos pedidos',order});
 
 	} catch (e) {
 		console.log(e);
-		console.log(order);
 		return res.status(400).send({message: 'Erro order',order});
 
 	}
@@ -35,14 +34,12 @@ exports.post = async (req,res,next) => {
 
 		if(order.length === 0) res.status(400).send({message: 'Pedido não cadastrado', data: e});
 
-		return res.status(201).send({message: 'Pedido criado',order
-});
+			return res.status(201).send({message: 'Pedido criado',order});
 
 
 		} catch (e) {
-			return res.status(400).send({message: 'Pedido Não Criado',order
-});
 			console.log(e)
+			return res.status(400).send({message: 'Pedido Não Criado',order});
 		}
 
 

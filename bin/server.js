@@ -15,7 +15,7 @@ const router = express.Router();
 
 
 server.listen(port, () => {
-	console.log('Running port 3000');
+	console.log('Running port ' + port);
 });
 server.on('error', onError);
 server.on('listening', onListening);

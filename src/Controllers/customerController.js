@@ -5,14 +5,22 @@ const customerRepository = require('./../repositories/customerrepository');
 const md5 = require('md5');
 const emailService = require('./../services/emailService');
 
+
+exports.get = async(req,res) => {
+	try {
+		let data = await customerRepository.get();
+		if(data.length === 0) res.status(400).send({message: 'Não há clientes'});
+		return res.status(201).send(data);
+
+	}catch (e) {
+		console.log(e);
+		res.status(400).send({message: 'Não há clientes'});
+	}
+}
 //rota/clientes/create
 exports.post = async (req,res,next) => {	
 
 	try {
-
-		// isValid(req.body.name,"Nome não é válido");
-		// isValid(req.body.email,"Email não é válido");
-		// isValid(req.body.password,"password não é válido");
 
 		let data = req.body;
 		data.password = md5(global.SALT_KEY + req.body.password);

@@ -2,21 +2,21 @@
 
 const mongoose = require('mongoose');
 const Customer = mongoose.model('Customer');
-//const Product = require('./../models/productsModel');
 
 
 
-// module.exports.get =  () => {
 
-// 	try {
+module.exports.get =  () => {
 
-// 		return Product.find({},'title price slug');
+	try {
+
+		return Customer.find({});
 	
 
-// 	} catch (e){
-// 		console.log(e);
-// 	}
-// }
+	} catch (e){
+		console.log(e);
+	}
+}
 
 module.exports.create =  async (body) => {
 
