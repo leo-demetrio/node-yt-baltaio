@@ -25,9 +25,7 @@ module.exports.create =  async (body) => {
 		const order = await new Order(body);
 		return order.save();
 
-		//return order.save();
 	
-
 	} catch (e){
 		console.log(e);
 	}

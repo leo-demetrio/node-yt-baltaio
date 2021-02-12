@@ -11,7 +11,7 @@ exports.get = async (req,res,next) => {
 	try {
 
 	const productAll = await productRepository.get();
-	//console.log(productAll);
+
 	if(productAll.length === 0) return res.status(200).send({message: "Nenhum produto encontrado"});
 	return	res.status(200).send(productAll);
 
@@ -95,7 +95,7 @@ exports.put = async (req,res,next) => {
 
 	//new true para devolver o valor atualizado
 	const result = await productRepository.update(req.params.id,req.body);
-	//console.log(result);
+	
 	if(result.length === 0) res.status(400).send({message: 'não encontrou',result});
 	return res.status(200).send({message: 'Atualizado',result});
 
@@ -129,8 +129,3 @@ function fcatch(err,codigo,message) {
 
 
 
-
-//  catch (e) {
-	// 	return res.status(400).send({message: 'Nada excluído'});
-	// 	console.log(e);
-	// }
