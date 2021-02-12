@@ -10,16 +10,16 @@ const OrderSchema = new Schema({
 			 },		
 			number: {
 			 type: String,
-			 required: true, 
+			 required: [true, 'O número é obrigatório'], 
 			},
 			createDate: {
 			 type: Date,
-			 required: true, 
+			 required: [true, 'A data é obrigatória'], 
 			 default: Date.now
 			},
 			status: {
 			 type: String,
-			 required: true,
+			 required: [true, 'O status é obrigatório'],
 			 enum: ['created','done'], 
 			 default: 'created'
 			},			
@@ -32,14 +32,14 @@ const OrderSchema = new Schema({
 				},
 				price: {
 				 type: Number,
-				 required: true, 
+				 required: [true, 'O preço é obrigatório'], 
 				},
 				product: {
 				 type: mongoose.Schema.Types.Object,
 				  ref: 'Product',
 				 }
 
-			 	}]
+			 }]
 		}
 	
 );

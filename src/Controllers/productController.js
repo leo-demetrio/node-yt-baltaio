@@ -10,10 +10,10 @@ exports.get = async (req,res,next) => {
 
 	try {
 
-	const productAll = await productRepository.get();
+		const productAll = await productRepository.get();
 
 	if(productAll.length === 0) return res.status(200).send({message: "Nenhum produto encontrado"});
-	return	res.status(200).send(productAll);
+		return	res.status(200).send(productAll);
 
 	} catch (e) {
 		return res.status(400).send({message: 'Nada achado'});
@@ -40,6 +40,8 @@ exports.getById = async (req,res,next) => {
 
 	try {
 		
+		let contract = new Validator();
+
 		const id = await productRepository.getById(req.params.id);
 		if(id.length === 0) return res.status(200).send({message: "Nenhum produto encontrado"});
 		return	res.status(200).send(id);
@@ -70,8 +72,11 @@ exports.post = async (req,res,next) => {
 
 	try {
 
-		let contract = new Validator();
+		let contract = new Validator();		
 		contract.isRequired(req.body.title, "O titulo é requerido");
+		contract.isRequired(req.body.slug, "O slug é requerido");
+		contract.isRequired(req.body.description, "A descrição é requerida");
+		contract.isRequired(req.body.price, "O preço é requerido");
 
 		if(!contract.isValid()) return res.status(400).send(contract.errors()).end();
 	

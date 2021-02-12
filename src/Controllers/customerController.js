@@ -22,6 +22,15 @@ exports.post = async (req,res,next) => {
 
 	try {
 
+		let contract = new Validator();
+		contract.isRequired(req.body.name, "O nome é requerido");
+		contract.isRequired(req.body.email, "O email é requerido");
+		contract.isRequired(req.body.password, "A senha é requerida");
+		contract.hasMinLen(req.body.password,5, "A senha deve pussuir 5 caracteres");
+		contract.isEmail(req.body.email, "O email não possui um formato válido");	
+
+		if(!contract.isValid()) return res.status(400).send(contract.errors()).end();
+	
 		let data = req.body;
 		data.password = md5(global.SALT_KEY + req.body.password);
 

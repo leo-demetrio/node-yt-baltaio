@@ -19,22 +19,20 @@ const ProductSchema = new Schema({
 			 },
 			description: {
 			 type: String,
-			  required: true,
+			  required: [true, 'A  descrição é obrigatória'],
 			   trim:true
 			  },
 			price: {
 			 type: Number,
-			 required: true
+			 required: [true, 'O preço é obrigatório']
 			 },
 			active: {
 			 type: Boolean,
-			  required: true,
 			  default: true
 			  },
 			tags: [
 			{ 
-				type: String,
-				required: true 
+				type: String
 			}
 			],
 
